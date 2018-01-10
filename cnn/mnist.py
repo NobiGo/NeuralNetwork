@@ -116,6 +116,9 @@ h_pool2 = max_pool_2x2(h_conv2)
 W_fc1 = weight_variable([7 * 7 * 64, 1024])
 # 1024个偏执数据
 b_fc1 = bias_variable([1024])
+"""
+每一个卷积都具有一个偏置数据
+"""
 # 将第二层卷积池化结果reshape成只有一行7*7*64个数据# [n_samples, 7, 7, 64] ->> [n_samples, 7*7*64]
 h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 64])
 # 卷积操作，结果是1*1*1024，单行乘以单列等于1*1矩阵，matmul实现最基本的矩阵相乘，不同于tf.nn.conv2d的遍历相乘，自动认为是前行向量后列向量
@@ -143,7 +146,7 @@ train_step = tf.train.GradientDescentOptimizer(0.5).minimize(
 correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(ys, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 tf.global_variables_initializer().run()
-for i in range(10000):
+for i in range(5000):
     batch = mnist.train.next_batch(50)
     if i % 100 == 0:
         train_accuracy = accuracy.eval(
