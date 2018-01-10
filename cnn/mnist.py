@@ -99,9 +99,15 @@ w_conv2 = weight_variable([5, 5, 32, 64])
 """
 # 64个偏执数据
 b_conv2 = bias_variable([64])
-# 注意h_pool1是上一层的池化结果，#卷积结果14x14x64
+"""
+每个卷积核对应一个偏置数据
+"""
+# 注意h_pool1是上一层的池化结果，#卷积结果14x14x64（14*14*32*64）
 h_conv2 = tf.nn.relu(conv2d(h_pool1, w_conv2) + b_conv2)
-# 池化结果7x7x64
+"""
+
+"""
+# 池化结果7x7x64（7*7*32*64）
 h_pool2 = max_pool_2x2(h_conv2)
 # 原图像尺寸28*28，第一轮图像缩小为14*14，共有32张，第二轮后图像缩小为7*7，共有64张
 
@@ -137,7 +143,7 @@ train_step = tf.train.GradientDescentOptimizer(0.5).minimize(
 correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(ys, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 tf.global_variables_initializer().run()
-for i in range(1000):
+for i in range(10000):
     batch = mnist.train.next_batch(50)
     if i % 100 == 0:
         train_accuracy = accuracy.eval(
